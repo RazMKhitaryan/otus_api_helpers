@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="soapClient" class="com.consol.citrus.ws.client.WebServiceClient">
+        <constructor-arg>
+            <bean class="com.consol.citrus.ws.client.WebServiceEndpointConfiguration">
+                <property name="defaultUri" value="http://45.132.17.22/wiremock/soap/userQuery"/>
+                <property name="messageConverter">
+                    <bean class="com.consol.citrus.ws.message.converter.SoapMessageConverter"/>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+</beans>
