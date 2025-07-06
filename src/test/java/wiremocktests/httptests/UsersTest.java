@@ -1,6 +1,6 @@
-package wiremocktests.soap.httptests;
+package wiremocktests.httptests;
 
-import wiremocktests.soap.base.TestBase;
+import wiremocktests.base.TestBase;
 import models.ScoreModel;
 import models.UserModel;
 import org.testng.annotations.Test;

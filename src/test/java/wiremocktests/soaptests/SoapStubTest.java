@@ -1,4 +1,4 @@
-package wiremocktests.soap.soaptests;
+package wiremocktests.soaptests;
 
 import static com.consol.citrus.ws.actions.SoapActionBuilder.soap;
 
