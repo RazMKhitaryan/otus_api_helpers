@@ -12,18 +12,17 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
         <restassured.version>4.5.1</restassured.version>
         <lombok.version>1.18.38</lombok.version>
         <maven.checkstyle.version>3.6.0</maven.checkstyle.version>
         <maven.spotbugs.version>4.9.3.0</maven.spotbugs.version>
-        <maven.surefire.version>3.5.3</maven.surefire.version>
+        <maven.surefire.version>2.22.0</maven.surefire.version>
         <maven.compiler.version>3.14.0</maven.compiler.version>
         <testng.version>7.11.0</testng.version>
-        <citrus.version>3.1.1</citrus.version>
-
+        <citrus.version>3.4.1</citrus.version>
+        <threadCount>2</threadCount>
     </properties>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -31,6 +30,7 @@
     </parent>
 
     <dependencies>
+        <!-- Citrus Core & Extensions -->
         <dependency>
             <groupId>com.consol.citrus</groupId>
             <artifactId>citrus-core</artifactId>
@@ -51,23 +51,23 @@
             <artifactId>citrus-http</artifactId>
             <version>${citrus.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.consol.citrus</groupId>
             <artifactId>citrus-testng</artifactId>
             <version>${citrus.version}</version>
         </dependency>
 
+        <!-- TestNG -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${testng.version}</version>
         </dependency>
 
+        <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -80,6 +80,7 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -87,30 +88,35 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Rest Assured -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>${restassured.version}</version>
         </dependency>
-
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>json-schema-validator</artifactId>
             <version>${restassured.version}</version>
         </dependency>
-
     </dependencies>
+
     <build>
         <plugins>
+            <!-- Spring Boot plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <!-- Compiler plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.version}</version>
                 <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -118,15 +124,18 @@
                             <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
-                    <source>21</source>
-                    <target>21</target>
                 </configuration>
             </plugin>
+
+            <!-- Surefire for running TestNG -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven.surefire.version}</version>
                 <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
                     <systemPropertyVariables>
                         <base.uri>http://45.132.17.22</base.uri>
                     </systemPropertyVariables>
@@ -134,6 +143,8 @@
                     <threadCount>${threadCount}</threadCount>
                 </configuration>
             </plugin>
+
+            <!-- Code quality: Checkstyle -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -146,12 +157,12 @@
                     <execution>
                         <id>analyze-compile</id>
                         <phase>compile</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
+                        <goals><goal>check</goal></goals>
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Static analysis: SpotBugs -->
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
@@ -160,13 +171,10 @@
                     <execution>
                         <id>analyze-compile</id>
                         <phase>compile</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
+                        <goals><goal>check</goal></goals>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
-
 </project>

@@ -1,8 +1,8 @@
-package httptests;
+package wiremocktests.soap.httptests;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
-import base.TestBase;
+import wiremocktests.soap.base.TestBase;
 import org.testng.annotations.Test;
 
 public class CoursesTest extends TestBase {
