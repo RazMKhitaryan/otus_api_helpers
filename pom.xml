@@ -17,10 +17,10 @@
         <maven.checkstyle.version>3.6.0</maven.checkstyle.version>
         <maven.spotbugs.version>4.9.3.0</maven.spotbugs.version>
         <maven.surefire.version>2.22.0</maven.surefire.version>
-        <maven.compiler.version>3.14.0</maven.compiler.version>
         <testng.version>7.11.0</testng.version>
         <citrus.version>3.4.1</citrus.version>
-        <threadCount>4</threadCount>
+        <threadCount>3</threadCount>
+        <maven.compiler.version>3.14.0</maven.compiler.version>
     </properties>
 
     <parent>
@@ -30,6 +30,33 @@
     </parent>
 
     <dependencies>
+        <!-- ActiveMQ -->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>5.19.0</version>
+        </dependency>
+
+        <!-- RabbitMQ: Exclude log4j-to-slf4j -->
+        <dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+            <version>5.16.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-to-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- MySQL Connector -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+
         <!-- Citrus Core & Extensions -->
         <dependency>
             <groupId>com.consol.citrus</groupId>
@@ -64,17 +91,30 @@
             <version>${testng.version}</version>
         </dependency>
 
-        <!-- Spring Boot -->
+        <!-- Spring Boot: Exclude log4j-to-slf4j -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-to-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
+        <!-- Log4j2: Route SLF4J to Log4j2 -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>2.20.0</version>
+        </dependency>
+
+        <!-- Spring Boot Web & Thymeleaf -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -103,13 +143,13 @@
 
     <build>
         <plugins>
-            <!-- Spring Boot plugin -->
+            <!-- Spring Boot Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- Compiler plugin -->
+            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -127,7 +167,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Surefire for running TestNG -->
+            <!-- Surefire Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -144,7 +184,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Code quality: Checkstyle -->
+            <!-- Checkstyle -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -162,7 +202,7 @@
                 </executions>
             </plugin>
 
-            <!-- Static analysis: SpotBugs -->
+            <!-- SpotBugs -->
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
