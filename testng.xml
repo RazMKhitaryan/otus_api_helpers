@@ -3,6 +3,7 @@
     <test name="otus wiremock">
         <packages>
             <package name="wiremocktests.*"></package>
+            <package name="sqltest.*"></package>
         </packages>
     </test>
 </suite>
