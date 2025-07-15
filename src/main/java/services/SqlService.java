@@ -1,5 +1,6 @@
 package services;
 
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.sql.*;
@@ -48,25 +49,20 @@ public class SqlService {
     }
   }
 
-  public boolean selectRecord(String name) {
+  @SneakyThrows
+  public ResultSet selectRecord(String name) {
     String selectQuery = "SELECT * FROM test_table WHERE name = ?";
-    try (Connection connection = getConnection();
-         PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+    Connection connection = getConnection();
+    PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
       preparedStatement.setString(1, name);
-      try (ResultSet resultSet = preparedStatement.executeQuery()) {
+    ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
           System.out.println("ID: " + resultSet.getInt("id"));
           System.out.println("Name: " + resultSet.getString("name"));
           System.out.println("Created At: " + resultSet.getTimestamp("created_at"));
-          return true;
         } else {
           System.out.println("No record found with name: " + name);
-          return false;
         }
+    return resultSet;
       }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return false;
   }
-}

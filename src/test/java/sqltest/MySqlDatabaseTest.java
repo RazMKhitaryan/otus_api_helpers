@@ -22,14 +22,15 @@ public class MySqlDatabaseTest extends AbstractTestNGSpringContextTests {
     sqlService.createTable();
   }
 
-
+  @SneakyThrows
   @Test
   public void testInsertAndSelect() {
     SoftAssert softAssert = new SoftAssert();
     String testName = "Test Name";
-    sqlService.insertRecord(testName); // Insert a record
-    boolean recordExists = sqlService.selectRecord(testName);
-    softAssert.assertTrue(recordExists, "Record should exist in the database");
+    sqlService.insertRecord(testName);
+    ResultSet resultSet = sqlService.selectRecord(testName);
+    softAssert.assertEquals(resultSet.getInt("id"), 1);
+    softAssert.assertEquals(resultSet.getString("name"), testName);
     softAssert.assertAll();
   }
 }
