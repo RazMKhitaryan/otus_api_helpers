@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import services.SqlService;
 import springmvc.SpringMvcApplication;
-import java.sql.ResultSet;
+import java.util.Map;
 
 @SpringBootTest(classes = SpringMvcApplication.class)
 public class MySqlDatabaseTest extends AbstractTestNGSpringContextTests {
@@ -28,9 +28,9 @@ public class MySqlDatabaseTest extends AbstractTestNGSpringContextTests {
     SoftAssert softAssert = new SoftAssert();
     String testName = "Test Name";
     sqlService.insertRecord(testName);
-    ResultSet resultSet = sqlService.selectRecord(testName);
-    softAssert.assertEquals(resultSet.getInt("id"), 1);
-    softAssert.assertEquals(resultSet.getString("name"), testName);
+    Map<String, Object> record = sqlService.selectRecord(testName);
+    softAssert.assertEquals(record.get("id"), 1);
+    softAssert.assertEquals(record.get("name"), testName);
     softAssert.assertAll();
   }
 }

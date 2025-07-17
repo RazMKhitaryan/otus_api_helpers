@@ -1,9 +1,10 @@
 package services;
 
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class SqlService {
@@ -49,20 +50,27 @@ public class SqlService {
     }
   }
 
-  @SneakyThrows
-  public ResultSet selectRecord(String name) {
+  public Map<String, Object> selectRecord(String name) {
     String selectQuery = "SELECT * FROM test_table WHERE name = ?";
-    Connection connection = getConnection();
-    PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
+    try (Connection connection = getConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
       preparedStatement.setString(1, name);
-    ResultSet resultSet = preparedStatement.executeQuery();
+
+      try (ResultSet resultSet = preparedStatement.executeQuery()) {
         if (resultSet.next()) {
-          System.out.println("ID: " + resultSet.getInt("id"));
-          System.out.println("Name: " + resultSet.getString("name"));
-          System.out.println("Created At: " + resultSet.getTimestamp("created_at"));
+          // Collect the result in a Map
+          Map<String, Object> record = new HashMap<>();
+          record.put("id", resultSet.getInt("id"));
+          record.put("name", resultSet.getString("name"));
+          record.put("created_at", resultSet.getTimestamp("created_at"));
+          return record; // Return the record data
         } else {
-          System.out.println("No record found with name: " + name);
+          throw new RuntimeException("No record found with name: " + name);
         }
-    return resultSet;
       }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new RuntimeException("Error while executing selectRecord", e);
+    }
   }
+}
