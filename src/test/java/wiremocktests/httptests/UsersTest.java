@@ -24,7 +24,7 @@ public class UsersTest extends TestBase {
     UserModel user = userRestService.getAllUsers();
     softAssert.assertEquals(23, user.getAge(), "User age does not match");
     softAssert.assertEquals("Test user", user.getName(), "User name does not match");
-    softAssert.assertEquals("QA", user.getCource(), "User course does not match");
+    softAssert.assertEquals("QA", user.getCourse(), "User course does not match");
     softAssert.assertEquals("test@test.test", user.getEmail(), "User email does not match");
     softAssert.assertAll();
   }
