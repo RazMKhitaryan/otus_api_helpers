@@ -22,7 +22,6 @@ node('maven') {
           allure([
               includeProperties: false,
               jdk: '',
-              commandline: 'allure',   // 👈 must match the name from Global Config
               properties: [],
               reportBuildPolicy: 'ALWAYS',
               results: [[path: 'allure-results']]
