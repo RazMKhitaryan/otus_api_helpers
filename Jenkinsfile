@@ -18,13 +18,16 @@ node('maven') {
         try {
             echo "Tests finished, publishing Allure results..."
         } finally {
-            allure([
-                    includeProperties: false,
-                    jdk: '',
-                    properties: [],
-                    reportBuildPolicy: 'ALWAYS',
-                    results: [[path: 'allure-results']]
-            ])
+            always {
+          allure([
+              includeProperties: false,
+              jdk: '',
+              commandline: 'allure',   // 👈 must match the name from Global Config
+              properties: [],
+              reportBuildPolicy: 'ALWAYS',
+              results: [[path: 'allure-results']]
+          ])
+           }
         }
     }
 }
