@@ -3,6 +3,20 @@ import groovy.json.JsonSlurper
 pipeline {
     agent { label 'maven' }
 
+    parameters {
+        gitParameter(
+            branch: '',
+            branchFilter: 'origin/(.*)',
+            defaultValue: 'main',
+            description: 'Select a Git branch to build',
+            name: 'BRANCH',
+            quickFilterEnabled: true,
+            selectedValue: 'DEFAULT',
+            sortMode: 'DESCENDING',
+            type: 'PT_BRANCH'
+        )
+    }
+
     stages {
         stage('Test Allure CLI') {
             steps {
@@ -13,7 +27,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout([$class: 'GitSCM',
-                          branches: [[name: 'main']],
+                          branches: [[name: "${params.BRANCH}"]],
                           userRemoteConfigs: [[url: 'https://github.com/RazMKhitaryan/otus_api_helpers.git']]
                 ])
             }
@@ -48,7 +62,7 @@ pipeline {
 
                 def passedCount = json.statistic.passed
                 def totalCount = json.statistic.total
-                def message = "Allure Report Api run: ${passedCount}/${totalCount} tests passed ✅"
+                def message = "Allure Report Api run (${params.BRANCH}): ${passedCount}/${totalCount} tests passed ✅"
 
                 def botToken = '8228531250:AAF4-CNqenOBmhO_U0qOq1pcpvMDNY0RvBU'
                 def chatId = '6877916742'
