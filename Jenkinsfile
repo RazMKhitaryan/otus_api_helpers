@@ -1,4 +1,3 @@
-@Grab('org.codehaus.groovy:groovy-json:3.0.9')
 import groovy.json.JsonSlurper
 
 pipeline {
