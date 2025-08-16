@@ -54,24 +54,27 @@ pipeline {
             sh 'allure generate --clean allure-results'
             echo "allure folder generated"
 
-            script {
-                def summaryFile = 'allure-report/widgets/summary.json'
-                def summaryContent = readFile(summaryFile)
+           script {
+               def summaryFile = 'allure-report/widgets/summary.json'
+               def summaryContent = readFile(summaryFile)
 
-                def json = new JsonSlurper().parseText(summaryContent)
+               def json = new groovy.json.JsonSlurper().parseText(summaryContent)
 
-                def passedCount = json.statistic.passed
-                def totalCount = json.statistic.total
-                def message = "Allure Report Api run (${params.BRANCH}): ${passedCount}/${totalCount} tests passed ✅"
+               // Extract only primitive values for pipeline
+               def passedCount = json.statistic.passed as int
+               def totalCount = json.statistic.total as int
+               def message = "Allure Report Api run (${params.BRANCH}): ${passedCount}/${totalCount} tests passed ✅"
 
-                def botToken = '8228531250:AAF4-CNqenOBmhO_U0qOq1pcpvMDNY0RvBU'
-                def chatId = '6877916742'
-                sh """
-                curl -s -X POST https://api.telegram.org/bot${botToken}/sendMessage \
-                     -d chat_id=${chatId} \
-                     -d text="${message}"
-                """
-            }
+               def botToken = '8228531250:AAF4-CNqenOBmhO_U0qOq1pcpvMDNY0RvBU'
+               def chatId = '6877916742'
+
+               // Send message
+               sh """
+               curl -s -X POST https://api.telegram.org/bot${botToken}/sendMessage \
+                    -d chat_id=${chatId} \
+                    -d text="${message}"
+               """
+           }
 
             echo "Pipeline finished"
         }
