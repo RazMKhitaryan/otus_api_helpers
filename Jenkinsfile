@@ -31,8 +31,7 @@ pipeline {
                     jdk: '',
                     properties: [],
                     reportBuildPolicy: 'ALWAYS',
-                    results: [[path: 'allure-results']],
-                    tool: 'allure'   // must match Jenkins Global Tool Configuration
+                    results: [[path: 'allure-results']]
                 ])
             }
         }
