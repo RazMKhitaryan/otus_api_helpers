@@ -26,14 +26,13 @@ pipeline {
         stage('Allure Report Publisher') {
             steps {
                 echo "Tests finished, publishing Allure results..."
-                 allure([
-                        includeProperties: false,
-                        jdk: '',
-                        properties: [],
-                        reportBuildPolicy: 'ALWAYS',
-                        results: [[path: 'allure-results']],
-                        tool: 'allure'   // this must match the name you set in Jenkins Global Tool Configuration
-                    ]): [[path: 'allure-results']]
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    properties: [],
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: 'allure-results']],
+                    tool: 'allure'   // must match Jenkins Global Tool Configuration
                 ])
             }
         }
