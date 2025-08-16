@@ -1,4 +1,7 @@
 node('maven') {
+    stage('testtest'){
+    sh "allure --version"
+    }
     stage('Checkout') {
         checkout([$class: 'GitSCM',
                   branches: [[name: 'main']],
