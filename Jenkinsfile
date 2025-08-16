@@ -1,5 +1,5 @@
 pipeline {
-    node ('maven'){
+    agent { label 'maven' }
 
     stages {
         stage('Test Allure CLI') {
@@ -41,6 +41,5 @@ pipeline {
         always {
             echo "Pipeline finished"
         }
-    }
     }
 }
