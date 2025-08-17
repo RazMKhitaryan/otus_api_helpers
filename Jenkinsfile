@@ -17,13 +17,14 @@ pipeline {
         )
     }
 
-    triggers {
-        // Trigger on SCM changes (e.g., after every merge/push)
-        pollSCM('* * * * *')   // Every minute check, can adjust as needed
+        triggers {
+            // Trigger on SCM changes (after every merge/push)
+            pollSCM('* * * * *') // adjust frequency as needed
 
-        // Trigger every day at 21:00
-        cron('0 21 * * *')
-    }
+            // Trigger every day at 21:00
+            cron('0 21 * * *')
+        }
+
 
     stages {
         stage('Test Allure CLI') {
@@ -37,14 +38,14 @@ pipeline {
                 checkout([
                     $class: 'GitSCM',
                     branches: [[ name: "${params.BRANCH}" ]],
-                    userRemoteConfigs: [[ url: 'https://github.com/RazMKhitaryan/otusAppium.git' ]]
+                    userRemoteConfigs: [[ url: 'https://github.com/RazMKhitaryan/otus_api_helpers.git' ]]
                 ])
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh "mvn clean test -DrunType=remote || true"
+                sh "mvn clean test -DthreadCount=5 || true"
             }
         }
     }
@@ -69,7 +70,7 @@ pipeline {
                     def total = summary.statistic.total ?: 0
                     def passed = summary.statistic.passed ?: 0
 
-                    def message = """✅ Mobile Test Execution Finished
+                    def message = """✅ API Test Execution Finished
                     Passed: ${passed}/${total}
                     """
 
