@@ -1,7 +1,7 @@
 import groovy.json.JsonSlurper
 
 pipeline {
-    agent { label 'maven' }
+    agent { label 'maven2' }
 
     parameters {
         gitParameter(
