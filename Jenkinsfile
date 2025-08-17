@@ -53,27 +53,22 @@ pipeline {
             echo "allure folder generated"
 
             script {
-                // Read summary and extract only primitive values
-                def summaryFile = 'allure-report/widgets/summary.json'
-                def summaryContent = readFile(summaryFile)
+                def summary = readJSON file: 'allure-report/widgets/summary.json'
+                def total = summary.statistic.total
+                def passed = summary.statistic.passed
+                def passRate = total > 0 ? (passed * 100.0 / total).round(2) : 0
 
-                def json = new groovy.json.JsonSlurper().parseText(summaryContent)
+                def message = "✅ Test Execution Finished\n" +
+                              "Total: ${total}\n" +
+                              "Passed: ${passed}\n" +
+                              "Pass Rate: ${passRate}%"
 
-                // Use only primitive values
-                def passedCount = json.statistic.passed.toString()
-                def totalCount = json.statistic.total.toString()
-                def branch = params.BRANCH
-                def message = "Allure Report Api run (${branch}): ${passedCount}/${totalCount} tests passed ✅"
-
-                // Send via curl
                 sh """
-                curl -s -X POST https://api.telegram.org/bot8228531250:AAF4-CNqenOBmhO_U0qOq1pcpvMDNY0RvBU/sendMessage \
-                     -d chat_id=6877916742 \
-                     -d text="${message}"
+                    curl -s -X POST https://api.telegram.org/bot8228531250:AAF4-CNqenOBmhO_U0qOq1pcpvMDNY0RvBU/sendMessage \
+                         -d chat_id=6877916742 \
+                         -d text="${message}"
                 """
             }
-
-            echo "Pipeline finished"
         }
     }
 }
