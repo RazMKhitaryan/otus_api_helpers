@@ -30,5 +30,4 @@ public class SoapStubTest extends TestNGCitrusSpringSupport {
             + "</usr:getUserResponse>")
     );
   }
-
 }
