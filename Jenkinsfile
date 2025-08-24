@@ -5,11 +5,6 @@ node('maven') {
 
     properties([
         parameters([
-            choice(
-                name: 'BROWSER',
-                choices: ['chrome', 'firefox'],
-                description: 'Choose browser for the tests'
-            ),
             gitParameter(
                 name: 'BRANCH',
                 branch: '',
@@ -41,7 +36,7 @@ node('maven') {
             ])
         }
 
-        stage('Run UI Tests') {
+        stage('Run API Tests') {
             sh "mkdir -p ${WORKSPACE}/allure-results ${WORKSPACE}/allure-report"
 
             sh """
@@ -52,9 +47,9 @@ node('maven') {
             """
 
             // Copy results from container
-            sh "docker cp ui_tests_run:/app/target/allure-results ${WORKSPACE}/ || true"
-            sh "docker cp ui_tests_run:/app/allure-results ${WORKSPACE}/ || true"
-            sh "docker rm -f ui_tests_run || true"
+            sh "docker cp api_tests_run:/app/target/allure-results ${WORKSPACE}/ || true"
+            sh "docker cp api_tests_run:/app/allure-results ${WORKSPACE}/ || true"
+            sh "docker rm -f api_tests_run || true"
         }
 
     } finally {
