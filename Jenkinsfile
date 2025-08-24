@@ -9,7 +9,7 @@ node('maven') {
                 name: 'BRANCH',
                 branch: '',
                 branchFilter: 'origin/(.*)',
-                defaultValue: 'project-with-spring-testng',
+                defaultValue: 'main',
                 description: 'Select a Git branch to build',
                 quickFilterEnabled: true,
                 selectedValue: 'DEFAULT',
@@ -36,7 +36,7 @@ node('maven') {
             ])
         }
 
-        stage('Run API Tests') {
+        stage('Run UI Tests') {
             sh "mkdir -p ${WORKSPACE}/allure-results ${WORKSPACE}/allure-report"
 
             sh """
