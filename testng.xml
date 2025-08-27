@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="AllTests" verbose="1">
+<suite name="API" verbose="1">
     <test name="otus wiremock">
         <packages>
             <package name="wiremocktests.*"></package>
