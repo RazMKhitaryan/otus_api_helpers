@@ -49,6 +49,7 @@ node('maven') {
             // Copy results from container
          //   sh "docker cp api_tests_run:/app/target/allure-results ${WORKSPACE}/ || true"
             sh "docker cp api_tests_run:/app/allure-results ${WORKSPACE}/ || true"
+            archiveArtifacts artifacts: 'allure-results/**', fingerprint: true
             sh "docker rm -f api_tests_run || true"
         }
 
